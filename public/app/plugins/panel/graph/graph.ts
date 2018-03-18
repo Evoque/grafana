@@ -620,6 +620,18 @@ function graphDirective(timeSrv, popoverSrv, contextSrv) {
         return ticks;
       }
 
+      // the outer param `axis` seems unnecessary, because inner `axis` will overwrite outer `axis`;
+      // so the func should be one of the two methods below:
+      function configureAxisModeWithOuter(axis, format) {
+        axis.tickFormatter = function(val) {
+          return kbn.valueFormats[format](val, axis.tickDecimals, axis.scaledDecimals);
+        };
+      }
+      function configureAxisModeWithInner( format) {
+        axis.tickFormatter = function(val, axis) {
+          return kbn.valueFormats[format](val, axis.tickDecimals, axis.scaledDecimals);
+        };
+      }
       function configureAxisMode(axis, format) {
         axis.tickFormatter = function(val, axis) {
           return kbn.valueFormats[format](val, axis.tickDecimals, axis.scaledDecimals);
